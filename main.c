@@ -26,7 +26,7 @@ void	send_all_client(s_env* env,int	nbytes, char* buff, int i)
 	{
 		if (FD_ISSET(j,&env->master))
 			if (j != env->sockfd && j != i)
-				send(j,buff,sizeof buff,0);
+				send(j,buff,nbytes,0);
 		j = j + 1;
 	}
 }
@@ -47,9 +47,9 @@ void	new_client(s_env* env)
 	FD_SET(newfd, &env->master);
 	recv(newfd, buff, sizeof buff, 0);
 	printf("%s\n",buff);
-	send(newfd,welcom,sizeof welcom,0);
-	send(newfd,yourhost,sizeof yourhost,0);
-	send(newfd,create,sizeof create,0);
+	send(newfd,welcom,strlen(welcom),0);
+	send(newfd,yourhost,strlen(yourhost),0);
+	send(newfd,create,strlen(create),0);
 	
 	
 }
