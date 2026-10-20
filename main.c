@@ -34,6 +34,7 @@ void	send_all_client(s_env* env,int	nbytes, char* buff, int i)
 void	new_client(s_env* env)
 {
 	int	newfd;
+	int	nbytes;
 	char	buff[1024];
 	char	welcom[] = "Welcome to the Internet Relay Network nick!user@host\n";
 	char 	yourhost[] = "Your host is servername, running version version\n";
@@ -45,13 +46,15 @@ void	new_client(s_env* env)
 	if (newfd > env->fdmax)
 		env->fdmax = newfd;
 	FD_SET(newfd, &env->master);
-	recv(newfd, buff, sizeof buff, 0);
-	printf("%s\n",buff);
+	nbytes = recv(newfd, buff, sizeof(buff) - 1, 0);
+	if (nbytes > 0)
+	{
+		buff[nbytes] = '\0';
+		printf("%s\n", buff);
+	}
 	send(newfd,welcom,sizeof welcom,0);
 	send(newfd,yourhost,sizeof yourhost,0);
 	send(newfd,create,sizeof create,0);
-	
-	
 }
 
 void	read_fd(s_env* env)
