@@ -26,7 +26,7 @@ void	send_all_client(s_env* env,int	nbytes, char* buff, int i)
 	{
 		if (FD_ISSET(j,&env->master))
 			if (j != env->sockfd && j != i)
-				send(j,buff,sizeof buff,0);
+				send(j,buff,nbytes,0);
 		j = j + 1;
 	}
 }
