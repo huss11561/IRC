@@ -5,7 +5,6 @@ typedef struct	t_env
 {
 	struct sockaddr_storage	their_addr;
 	socklen_t		addr_size;
-	int			newfd;
 	int			sockfd;
 	int			fdmax;
 	fd_set			master;
