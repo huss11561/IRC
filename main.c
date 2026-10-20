@@ -83,17 +83,28 @@ void	read_fd(s_env* env)
 	}
 }
 
-int	main(void)
+int	main(int argc, char *argv[])
 {
 	struct addrinfo	hints;
 	struct addrinfo	*res;
 	s_env		env;
 
+	if (argc != 3)
+	{
+		fprintf(stderr, "Usage: %s <IP> <PORT>\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
+	int status;
+
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC; 
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
-	getaddrinfo("127.0.0.1", "3490", &hints, &res);
+	if ((status = getaddrinfo(argv[1], argv[2], &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+		exit(EXIT_FAILURE);
+	}
 	env.sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	bind(env.sockfd, res->ai_addr, res->ai_addrlen);
 	listen(env.sockfd, 10);
