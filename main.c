@@ -20,14 +20,17 @@ void	send_all_client(s_env* env,int	nbytes, char* buff, int i)
 	int	j;
 
 	printf("Essaye d4envoyer %d\n",nbytes);
-	printf("%s \n",buff);
-	j = 0;
-	while (j <= env->fdmax)
+	if (nbytes > 0)
 	{
-		if (FD_ISSET(j,&env->master))
-			if (j != env->sockfd && j != i)
-				send(j,buff,sizeof buff,0);
-		j = j + 1;
+		printf("%.*s \n",nbytes,buff);
+		j = 0;
+		while (j <= env->fdmax)
+		{
+			if (FD_ISSET(j,&env->master))
+				if (j != env->sockfd && j != i)
+					send(j,buff,nbytes,0);
+			j = j + 1;
+		}
 	}
 }
 
@@ -35,6 +38,7 @@ void	new_client(s_env* env)
 {
 	int	newfd;
 	char	buff[1024];
+	int	nbytes;
 	char	welcom[] = "Welcome to the Internet Relay Network nick!user@host\n";
 	char 	yourhost[] = "Your host is servername, running version version\n";
 	char	create[] = "server_name version user_modes chan_modes\n";
@@ -45,11 +49,12 @@ void	new_client(s_env* env)
 	if (newfd > env->fdmax)
 		env->fdmax = newfd;
 	FD_SET(newfd, &env->master);
-	recv(newfd, buff, sizeof buff, 0);
-	printf("%s\n",buff);
-	send(newfd,welcom,sizeof welcom,0);
-	send(newfd,yourhost,sizeof yourhost,0);
-	send(newfd,create,sizeof create,0);
+	nbytes = recv(newfd, buff, sizeof buff, 0);
+	if (nbytes > 0)
+		printf("%.*s\n", nbytes, buff);
+	send(newfd,welcom,sizeof welcom - 1,0);
+	send(newfd,yourhost,sizeof yourhost - 1,0);
+	send(newfd,create,sizeof create - 1,0);
 	
 	
 }
