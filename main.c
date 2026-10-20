@@ -9,12 +9,6 @@
 #include <unistd.h>
 #include "base.h"
 
-void	send_to_client(s_env* env, int i, char* buff)
-{
-
-	
-}
-
 void	send_all_client(s_env* env,int	nbytes, char* buff, int i)
 {
 	int	j;
