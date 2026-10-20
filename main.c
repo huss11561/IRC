@@ -41,6 +41,10 @@ void	new_client(s_env* env)
 
 	env->addr_size = sizeof env->their_addr;
 	newfd = accept(env->sockfd, (struct sockaddr *)&env->their_addr,&env->addr_size);
+	if (newfd == -1) {
+		perror("accept");
+		return;
+	}
 	printf("connex %d\n", newfd);
 	if (newfd > env->fdmax)
 		env->fdmax = newfd;
