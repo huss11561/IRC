@@ -35,9 +35,9 @@ void	new_client(s_env* env)
 {
 	int	newfd;
 	char	buff[1024];
-	char	welcom[] = "Welcome to the Internet Relay Network nick!user@host\n";
-	char 	yourhost[] = "Your host is servername, running version version\n";
-	char	create[] = "server_name version user_modes chan_modes\n";
+	char	msg[] = "Welcome to the Internet Relay Network nick!user@host\n\0"
+			"Your host is servername, running version version\n\0"
+			"server_name version user_modes chan_modes\n";
 
 	env->addr_size = sizeof env->their_addr;
 	newfd = accept(env->sockfd, (struct sockaddr *)&env->their_addr,&env->addr_size);
@@ -47,9 +47,7 @@ void	new_client(s_env* env)
 	FD_SET(newfd, &env->master);
 	recv(newfd, buff, sizeof buff, 0);
 	printf("%s\n",buff);
-	send(newfd,welcom,sizeof welcom,0);
-	send(newfd,yourhost,sizeof yourhost,0);
-	send(newfd,create,sizeof create,0);
+	send(newfd,msg,sizeof msg,0);
 	
 	
 }
